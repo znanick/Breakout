@@ -1,0 +1,10 @@
+* {
+  margin: 0;
+}
+
+.container {
+  position: relative;
+  width: 4800px;
+  height: 3200px;
+  margin: 10px;
+}
