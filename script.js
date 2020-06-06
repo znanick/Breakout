@@ -54,6 +54,9 @@ function BreakOut(div) {
         bricks[y][x] = { posX: 0, posY: 0, status: this.random(1, 3) };
       }
     }
+    this.gameArea.appendChild(canvasArea);
+    canvasArea.setAttribute("width", area.width);
+    canvasArea.setAttribute("height", area.height);
     this.drawGameArea();
     this.drawBall();
     this.drawPlatform();
@@ -71,7 +74,8 @@ function BreakOut(div) {
   };
 
   this.update = function(){
-    ctx.clearRect(0, 0, area.width, area.height);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, area.width, area.height);
     this.drawGameArea();
     this.drawBall();
     this.drawPlatform();
@@ -83,7 +87,7 @@ function BreakOut(div) {
 
     platform.posX = platform.posX + platform.speedX;
     
-    requestAnimationFrame(this.update());
+    requestAnimationFrame(this.update);
   }
 
   this.keyDown = function(){
@@ -112,9 +116,7 @@ function BreakOut(div) {
   }
 
   this.drawGameArea = function () {
-    this.gameArea.appendChild(canvasArea);
-    canvasArea.setAttribute("width", area.width);
-    canvasArea.setAttribute("height", area.height);
+
     ctx.beginPath();
     ctx.rect(0, 0, area.width, area.height);
     ctx.fillStyle = "#EFEFEF";
