@@ -1,5 +1,6 @@
 "use strict";
-
+var a = document.getElementById("gameArea");
+a.style.height = (a.offsetWidth * 2) / 3 + "px";
 var game = new BreakOut("gameArea");
 game.onLoadPage();
 
@@ -18,36 +19,41 @@ function BreakOut(div) {
   var gamePixel = area.width / 50; //все состовляющие игры будут строится относительно этого значения
 
   var bricks = [];
-  var brickCountX = 6;
-  var brickCountY = 5;
+  var brickCountX = 5;
+  var brickCountY = 7;
   var brickCharacter = {
-    width: 8 * gamePixel,
-    height: 2 * gamePixel,
-    margin: (50 * gamePixel - 8 * gamePixel * brickCountX) / (brickCountY + 1), //отступы между кирпичами
+    width: 6 * gamePixel,
+    height: 1.2 * gamePixel,
+    margin:
+      (50 * gamePixel - 6.5 * gamePixel * brickCountX) / (brickCountY + 1), //отступы между кирпичами
   };
   var marginArea = //отступ между полем и кирпичами
     (50 * gamePixel -
       (brickCharacter.margin * (brickCountX - 1) +
         brickCharacter.width * brickCountX)) /
     2;
+  var marginUp = gamePixel * 2;
+
+  var platform = {
+    width: 8 * gamePixel,
+    height: gamePixel,
+    posX: area.width / 2 - 4 * gamePixel,
+    posY: area.height - gamePixel,
+    speedX: 0,
+  };
 
   var ball = {
-    radius: gamePixel,
+    radius: gamePixel / 3,
     posX: area.width / 2,
-    posY: area.height / 2,
+    posY: area.height - platform.height - gamePixel / 3,
     speedX: 0,
     speedY: 0,
   };
 
-  var platform = {
-    width: 8 * gamePixel,
-    height: 1.5 * gamePixel,
-    posX: area.width / 2 - 4 * gamePixel,
-    posY: area.height - 1.5 * gamePixel,
-    speedX: 0,
-  };
+  var gameStatus = 0;
 
   this.onLoadPage = function () {
+    gameStatus = 0;
     for (var y = 0; y < brickCountY; y++) {
       bricks[y] = [];
       for (var x = 0; x < brickCountX; x++) {
@@ -63,7 +69,10 @@ function BreakOut(div) {
     this.drawBricks();
     this.drawHeart();
     this.drawScore();
-
+    this.startBall();
+    document.addEventListener("keydown", this.keyDown);
+    document.addEventListener("keyup", this.keyUp);
+    document.addEventListener("mousemove", this.mouseMove);
     this.update();
   };
 
@@ -73,56 +82,156 @@ function BreakOut(div) {
     return Math.floor(Math.random() * (m - n + 1)) + n;
   };
 
-  this.update = function(){
+  this.update = function () {
+    ball.posX = ball.posX + ball.speedX;
+    ball.posY = ball.posY + ball.speedY;
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, area.width, area.height);
+    this.startBall();
     this.drawGameArea();
     this.drawBall();
     this.drawPlatform();
     this.drawBricks();
     this.drawHeart();
     this.drawScore();
-    this.keyDown()
-    this.keyUp()
+    this.areaColision();
+    this.platformColision();
+    this.platformMove();
+    this.brickColision();
+    requestAnimationFrame(() => {
+      this.update();
+    });
+  };
 
+  this.mouseMove = function (e) {
+    if (life) {
+      var relativeX = e.clientX - 11 * gamePixel;
+      if (relativeX > 0 && relativeX < area.width) {
+        platform.posX = relativeX - platform.width / 2;
+      }
+    }
+  };
+
+  this.keyDown = function (a) {
+    //Если нажата клавиша A
+    if (a.which == 65 && gameStatus == 1) {
+      platform.speedX = -gamePixel / 3;
+    }
+    // Если нажата клавиша D
+    else if (a.which == 68 && gameStatus == 1) {
+      platform.speedX = gamePixel / 3;
+    }
+    if (gameStatus == 0) {
+      platform.speedX = 0;
+    }
+  };
+
+  this.keyUp = function (a) {
+    if (a.which === 65 || a.which === 68) {
+      platform.speedX = 0;
+    }
+  };
+
+  this.platformMove = function () {
     platform.posX = platform.posX + platform.speedX;
-    
-    requestAnimationFrame(this.update);
-  }
+    if (platform.posX < 0) {
+      platform.speedX = 0;
+      platform.posX = 0;
+    }
+    if (platform.posX > area.width - platform.width) {
+      platform.speedX = 0;
+      platform.posX = area.width - platform.width;
+    }
+  };
 
-  this.keyDown = function(){
-    document.addEventListener("keydown", function (a) {
-      //Если нажата клавиша A
-      if (a.which === 65) {
-        platform.speedY = -gamePixel/2;
-      }
-  
-      // Если нажата клавиша D
-      else if (a.which === 68) {
-        platform.speedY = gamePixel/2;
-      }
-  })}
+  this.platformColision = function () {
+    if (
+      ball.posX <= platform.posX + platform.width &&
+      ball.posX >= platform.posX &&
+      ball.posY >= platform.posY - ball.radius
+    ) {
+      ball.posY = platform.posY - ball.radius;
+      ball.speedY = -ball.speedY;
+    }
+  };
 
-  this.keyUp = function(){
-    document.addEventListener("keyup", function (a) {
-      
-      if (a.which === 65 || a.which === 68) {
-        platform.speedY = 0;
+  this.brickColision = function () {
+    for (var y = 0; y < brickCountY; y++) {
+      for (var x = 0; x < brickCountX; x++) {
+        var b = bricks[y][x];
+        if (b.status != 0) {
+          if (
+            ball.posX > b.posX &&
+            ball.posX < b.posX + brickCharacter.width &&
+            ball.posY > b.posY - ball.radius &&
+            ball.posY < b.posY + brickCharacter.height + ball.radius
+          ) {
+            ball.speedY = -ball.speedY;
+            b.status = b.status - 1;
+            this.score++;
+          }
+        }
       }
-  
-      
-      
-  })
-  }
+    }
+  };
+
+  this.areaColision = function () {
+    if (ball.posX < 0 + ball.radius) {
+      //левая стена
+      ball.speedX = -ball.speedX;
+      ball.posX = 0 + ball.radius;
+    }
+    if (ball.posX > area.width - ball.radius) {
+      //правая стена
+      ball.speedX = -ball.speedX;
+      ball.posX = area.width - ball.radius;
+    }
+    if (ball.posY < 0 + ball.radius + marginUp) {
+      ball.speedY = -ball.speedY;
+      ball.posY = 0 + ball.radius + marginUp;
+      platform.width = 4 * gamePixel;
+    }
+    if (ball.posY > area.height - ball.radius) {
+      gameStatus = 0; //запрещаем двигаться платформе , пока мяч снова не начнет движение
+      life = life - 1;
+      ball.posY = area.height - ball.radius;
+      ball.speedY = 0;
+      ball.speedX = 0;
+
+      if (life) {
+        setTimeout(() => {
+          this.startBall();
+        }, 1000);
+      } else if (!life) {
+        //потом тут будем выдвигать таблицу рекордов
+      }
+    }
+  };
+
+  this.startBall = function () {
+    if (gameStatus == 0 && life) {
+      ball.posX = platform.posX + platform.width / 2;
+      ball.posY = area.height - platform.height - gamePixel / 3;
+      document.addEventListener("click", () => {
+        if (gameStatus == 0 && life) {
+          gameStatus = 1;
+          ball.speedY = -gamePixel / 4;
+          if (this.random(1, 2) == 1) {
+            ball.speedX = -gamePixel / 4;
+          } else {
+            ball.speedX = gamePixel / 4;
+          }
+        }
+      });
+    }
+  };
 
   this.drawGameArea = function () {
-
     ctx.beginPath();
     ctx.rect(0, 0, area.width, area.height);
     ctx.fillStyle = "#EFEFEF";
     ctx.fill();
-    ctx.strokeStyle = "black";
-    ctx.stroke();
+
     ctx.closePath();
   };
 
@@ -149,7 +258,7 @@ function BreakOut(div) {
           bricks[y][x].posX =
             x * (brickCharacter.width + brickCharacter.margin) + marginArea;
           bricks[y][x].posY =
-            y * (brickCharacter.height + gamePixel / 2) + gamePixel * 2;
+            y * (brickCharacter.height + gamePixel / 2) + marginUp;
           ctx.beginPath();
           ctx.rect(
             bricks[y][x].posX,
@@ -161,7 +270,7 @@ function BreakOut(div) {
             ctx.fillStyle = "green";
           } else if (bricks[y][x].status == 2) {
             ctx.fillStyle = "#0095DD";
-          } else {
+          } else if (bricks[y][x].status == 3) {
             ctx.fillStyle = "#FF0000";
           }
           ctx.fill();

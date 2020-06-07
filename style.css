@@ -4,7 +4,7 @@
 
 .container {
   position: relative;
-  width: 4800px;
-  height: 3200px;
-  margin: 10px;
+  width: 70%;
+
+  margin: auto;
 }
