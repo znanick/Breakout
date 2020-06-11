@@ -19,8 +19,8 @@ function BreakOut(div) {
   var gamePixel = area.width / 50; //все состовляющие игры будут строится относительно этого значения
 
   var bricks = [];
-  var brickCountX = 5;
-  var brickCountY = 7;
+  var brickCountX = 4;
+  var brickCountY = 4;
   var brickCharacter = {
     width: 6 * gamePixel,
     height: 1.2 * gamePixel,
@@ -77,7 +77,6 @@ function BreakOut(div) {
   };
 
   this.random = function (n, m) {
-    0;
     //рандом из интервала чисел a , b
     return Math.floor(Math.random() * (m - n + 1)) + n;
   };
