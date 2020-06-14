@@ -10,8 +10,31 @@
   padding: auto 15px;
 }
 
+#settings {
+  z-index: 100;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: burlywood;
+  text-align: center;
+  top: 0;
+  transition: background-color 1s cubic-bezier(0, 0, 1, 1) 700ms;
+  transition-property: top;
+}
+
 .canvas-container {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+#recordContainer {
+  position: absolute;
+  width: 50%;
+  height: 70%;
+  background-color: aqua;
+  top: -120%;
+  left: 25%;
+  transition: background-color 1s cubic-bezier(0, 0, 1, 1) 700ms;
+  transition-property: top;
 }

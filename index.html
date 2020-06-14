@@ -8,10 +8,26 @@
   </head>
   <body>
     <div class="container">
+      <div id="settings">
+        <span>Введите ваше имя : </span>
+        <input type="text" id="userName">
+        <h2>Давайте настроим игровой процесс!</h2>
+        <span>Блоки по-вертикали:</span>
+        <input type="range" id="ry" min="1" max="6" oninput="settings.ryView()">
+        <p id="ryTxt">4</p>
+        <span>Блоки по-горизонтали: </span>
+        <input type="range" id="rx" min="5" max="12" oninput="settings.rxView()">
+        <p id="rxTxt">9</p>
+        <button onclick="settings.start()">ИГРАТЬ!</button>
+      </div>
       <div class="canvas-container" id="gameArea">
         <canvas id="myCanvas"></canvas>
       </div>
+      <div class="record-container" id="recordContainer">
+
+      </div>
     </div>
+    <script src="settings.js"></script>
     <script src="arcanoid.js"></script>
   </body>
 </html>

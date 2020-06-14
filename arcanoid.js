@@ -8,8 +8,8 @@ var game = {
   platform: {},
   running: true,
   bricks: [],
-  brickCountX: 12, //12 - max
-  brickCountY: 5,
+  brickCountX: 0, //12 - max
+  brickCountY: 0,
   brickCharacter: {
     w: 4 * pixel,
     h: 1.2 * pixel,
@@ -44,6 +44,7 @@ var game = {
       if (game.gameStatus == 0) {
         game.gameStatus = 1;
         game.ball.jump();
+        console.log('click');
       }
     });
     document.addEventListener("mousemove", game.platform.mouseMove);
@@ -210,16 +211,19 @@ var game = {
 
   gameOverScore: function (key) {
     //local storage
-    if (this.score > JSON.parse(localStorage.key)) {
-      localStorage.key = JSON.stringify(this.score);
+    if (this.score > JSON.parse(localStorage[key])) {
+      localStorage[key] = JSON.stringify(this.score);
     }
-    console.log(localStorage.key);
+    console.log(localStorage[key]);
+    var recordContainer = document.getElementById("recordContainer");
+    var lr = document.createElement("p");
+    lr.innerHTML = "Ваш рекорд " + localStorage[key];
+    recordContainer.appendChild(lr);
+    recordContainer.style.top = "15%";
   },
 };
 
-window.addEventListener("load", function () {
-  game.start();
-});
+
 
 game.platform = {
   x: game.w / 2 - game.pixel * 4,
