@@ -113,11 +113,11 @@ var game = {
         this.ctx.beginPath();
         this.ctx.rect(element.x, element.y, element.w, element.h);
         if (element.lifes == 1) {
-          this.ctx.fillStyle = "green";
+          this.ctx.fillStyle = "#1abc9c";
         } else if (element.lifes == 2) {
           this.ctx.fillStyle = "#0095DD";
         } else if (element.lifes == 3) {
-          this.ctx.fillStyle = "#FF0000";
+          this.ctx.fillStyle = "#ff5b40";
         }
         this.ctx.fill();
         this.ctx.closePath();

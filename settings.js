@@ -19,7 +19,9 @@ var settings = {
       document.getElementById("settings").style.top = "-120%";
       game.brickCountX = rx.value;
       game.brickCountY = ry.value;
-      setTimeout(game.start(), 700);
+      setTimeout(function () {
+        game.start();
+      }, 700);
     }
   },
 };

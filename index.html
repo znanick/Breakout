@@ -9,22 +9,53 @@
   <body>
     <div class="container">
       <div id="settings">
-        <span>Введите ваше имя : </span>
-        <input type="text" id="userName">
+        <div class="name-container">
+          <span>Введите ваше имя : </span>
+          <input type="text" id="userName" value="Nick" />
+        </div>
+
         <h2>Давайте настроим игровой процесс!</h2>
-        <span>Блоки по-вертикали:</span>
-        <input type="range" id="ry" min="1" max="6" oninput="settings.ryView()">
-        <p id="ryTxt">4</p>
-        <span>Блоки по-горизонтали: </span>
-        <input type="range" id="rx" min="5" max="12" oninput="settings.rxView()">
-        <p id="rxTxt">9</p>
-        <button onclick="settings.start()">ИГРАТЬ!</button>
+        <div class="rng-container">
+          <span>Блоки по-вертикали:</span>
+          <div class="slidecontainer">
+            <input
+              class="slider"
+              type="range"
+              id="ry"
+              min="1"
+              max="6"
+              oninput="settings.ryView()"
+            />
+          </div>
+
+          <p id="ryTxt">4</p>
+        </div>
+
+        <div class="rng-container">
+          <span>Блоки по-горизонтали: </span>
+          <div class="slidecontainer">
+            <input
+              class="slider"
+              type="range"
+              id="rx"
+              min="5"
+              max="12"
+              oninput="settings.rxView()"
+            />
+          </div>
+          <p id="rxTxt">9</p>
+        </div>
+
+        <button id="start-but" onclick="settings.start()">Начать игру</button>
       </div>
       <div class="canvas-container" id="gameArea">
         <canvas id="myCanvas"></canvas>
       </div>
       <div class="record-container" id="recordContainer">
-
+        <button class="btn-green">
+          <img class="icon" src="img/reload-btn.png" />
+          Заново
+        </button>
       </div>
     </div>
     <script src="settings.js"></script>
