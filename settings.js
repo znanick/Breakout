@@ -51,17 +51,20 @@ var recordsAjax = {
   },
 
   lockGetReady: function (callresult) {
+    console.log(recordsAjax.topGamer);
+    var res = JSON.stringify(recordsAjax.topGamer);
+    console.log(res);
     if (callresult.error != undefined) alert(callresult.error);
     else {
       $.ajax({
-        url: this.ajaxHandlerScript,
+        url: recordsAjax.ajaxHandlerScript,
         type: "POST",
         cache: false,
         dataType: "json",
         data: {
           f: "UPDATE",
           n: this.stringName,
-          v: JSON.stringify(recordsAjax.topGamer),
+          v: res,
           p: this.updatePassword,
         },
         success: this.updateReady,
@@ -105,7 +108,7 @@ var recordsAjax = {
     if (game.score > top.score) {
       top.name = settings.userName;
       top.score = game.score;
-
+      console.log(top.score);
       this.storeInfo();
     }
   },

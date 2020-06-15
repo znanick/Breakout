@@ -210,10 +210,12 @@ var game = {
   },
 
   gameOverScore: function (key) {
+    this.running = false;
     audio.gameOver.sound();
     console.log("game over");
-    if (navigator.vibrate) { // есть поддержка Vibration API?
-      window.navigator.vibrate([500,100,300,50,100]);
+    if (navigator.vibrate) {
+      // есть поддержка Vibration API?
+      window.navigator.vibrate([500, 100, 300, 50, 100]);
     }
 
     //AJAX
@@ -293,7 +295,8 @@ game.ball = {
     audio.bam.sound();
     bricks.lifes--;
     this.dy *= -1;
-    if (navigator.vibrate) { // есть поддержка Vibration API?
+    if (navigator.vibrate) {
+      // есть поддержка Vibration API?
       window.navigator.vibrate(60);
     }
 
@@ -336,7 +339,6 @@ game.ball = {
       if (game.hearts > 0) {
         this.startBall();
       } else if (game.hearts == 0) {
-
         game.gameOverScore(game.localRecord);
         //таблица рекордов
       }
