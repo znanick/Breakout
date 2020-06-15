@@ -16,7 +16,7 @@ var game = {
   },
   score: 0,
   localRecord: "localRecord",
-  hearts: 3,
+  hearts: 1,
   gameStatus: 0,
   random: function (n, m) {
     //рандом из интервала чисел a , b
@@ -210,6 +210,11 @@ var game = {
   },
 
   gameOverScore: function (key) {
+    audio.gameOver.sound();
+    console.log("game over");
+    if (navigator.vibrate) { // есть поддержка Vibration API?
+      window.navigator.vibrate([500,100,300,50,100]);
+    }
     //local storage
     if (this.score > JSON.parse(localStorage[key])) {
       localStorage[key] = JSON.stringify(this.score);
@@ -282,9 +287,13 @@ game.ball = {
     return false;
   },
   bumpBrick: function (bricks) {
+    audio.bam.sound();
     bricks.lifes--;
     this.dy *= -1;
-    audio.bam.sound();
+    if (navigator.vibrate) { // есть поддержка Vibration API?
+      window.navigator.vibrate(60);
+    }
+
     ++game.score;
   },
 
@@ -324,8 +333,7 @@ game.ball = {
       if (game.hearts > 0) {
         this.startBall();
       } else if (game.hearts == 0) {
-        audio.gameOver.sound();
-        console.log("game over");
+
         game.gameOverScore(game.localRecord);
         //таблица рекордов
       }

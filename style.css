@@ -48,7 +48,7 @@ button {
   width: 30%;
   height: 7%;
 
-  margin:3% auto;
+ 
   padding: 0;
   font-size: 3.5vh;
   text-align: center;
@@ -114,7 +114,7 @@ button:active {
 }
 
 .name-container {
-  margin-top: 5%;
+  margin-top: 3%;
 }
 
 #userName{
@@ -130,15 +130,20 @@ button:active {
 
 h2 {
   margin: 7% 5px;
-
-  font-size: 5vh;
+  font-size: 4.5vh;
 }
 
 .rng-container {
-  margin: 5% 5px;
+  margin: 4% 5px;
+}
+
+#start-but{
+  
 }
 
 #start-but:hover{
   opacity: 70%;
   color: #f5f5dc;
 }
+
+
