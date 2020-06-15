@@ -24,6 +24,8 @@ var game = {
   },
 
   init: function () {
+    audio.gameOver.soundInit();
+    audio.bam.soundInit();
     document.getElementById("myCanvas").setAttribute("width", this.w);
     document.getElementById("myCanvas").setAttribute("height", this.h);
     this.ctx = document.getElementById("myCanvas").getContext("2d");
@@ -44,7 +46,7 @@ var game = {
       if (game.gameStatus == 0) {
         game.gameStatus = 1;
         game.ball.jump();
-        console.log('click');
+        console.log("click");
       }
     });
     document.addEventListener("mousemove", game.platform.mouseMove);
@@ -110,8 +112,6 @@ var game = {
     //кирпичи
     this.bricks.forEach(function (element) {
       if (element.lifes >= 1) {
-        this.ctx.beginPath();
-        this.ctx.rect(element.x, element.y, element.w, element.h);
         if (element.lifes == 1) {
           this.ctx.fillStyle = "#1abc9c";
         } else if (element.lifes == 2) {
@@ -119,8 +119,8 @@ var game = {
         } else if (element.lifes == 3) {
           this.ctx.fillStyle = "#ff5b40";
         }
-        this.ctx.fill();
-        this.ctx.closePath();
+
+        this.ctx.fillRect(element.x, element.y, element.w, element.h);
       }
     }, this);
 
@@ -223,8 +223,6 @@ var game = {
   },
 };
 
-
-
 game.platform = {
   x: game.w / 2 - game.pixel * 4,
   y: game.h - game.pixel / 2,
@@ -291,6 +289,10 @@ game.ball = {
   },
 
   bumpPuddle: function (platform) {
+    if (navigator.vibrate) {
+      // есть поддержка Vibration API?
+      window.navigator.vibrate(100);
+    }
     this.dy = -this.velo;
     if (this.onTheLeftSide(platform)) {
       this.dx = -this.velo;
