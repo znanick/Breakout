@@ -215,6 +215,9 @@ var game = {
     if (navigator.vibrate) { // есть поддержка Vibration API?
       window.navigator.vibrate([500,100,300,50,100]);
     }
+
+    //AJAX
+    recordsAjax.afterGame();
     //local storage
     if (this.score > JSON.parse(localStorage[key])) {
       localStorage[key] = JSON.stringify(this.score);
