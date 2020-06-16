@@ -40,7 +40,7 @@
   background-color: #f5f5dc;
   top: -100%;
   left: 25%;
-  transition: top 1s cubic-bezier(0, 0, 1, 1) 700ms;
+  transition: top 1.2s cubic-bezier(0, 0, 1, 1) 300ms;
   text-align: center;
 }
 
@@ -143,14 +143,14 @@ h2 {
 }
 
 #reload-btn {
-  font-size: 3vh;
+  font-size: 2vh;
 }
 
 #menu-btn {
   background-color: #a52a2a;
   border-bottom: 2px solid #a52a2a;
   box-shadow: inset 0 -2px #a52a2a;
-  font-size: 3vh;
+  font-size: 2vh;
 }
 
 .btn-cont {

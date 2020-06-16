@@ -16,6 +16,7 @@ var settings = {
     if (!inp.value) {
       inp.focus();
     } else {
+      document.getElementById('start-but').disabled= true;
       document.getElementById("settings").style.top = "-120%";
       settings.userName = inp.value;
       game.brickCountX = rx.value;
@@ -92,10 +93,10 @@ var recordsAjax = {
   readReady: function (callresult) {
     if (callresult.error != undefined) alert(callresult.error);
     else if (callresult.result != "") {
-      console.log(JSON.parse(callresult.result));
       this.topGamer = JSON.parse(callresult.result);
       console.log(this.topGamer);
       recordsAjax.comparison(this.topGamer);
+      return this.topGamer;
     }
   },
 
@@ -104,14 +105,50 @@ var recordsAjax = {
   },
 
   comparison: function (top) {
+    var self = this;
+    console.log(self.topGamer);
     console.log(top);
-    console.log("this" + this.topGamer);
-    console.log("class" + recordsAjax.topGamer);
+
     if (game.score > top.score) {
       top.name = settings.userName;
       top.score = game.score;
-      console.log("top" + top);
-      this.storeInfo();
+      console.log(self.topGamer);
+      self.storeInfo();
+      return self.topGamer;
     }
+  },
+};
+
+var gameOverPage = {
+  scoreDiv: document.getElementById("score"),
+  ls: document.createElement("p"),
+
+  userRecord: document.getElementById("score"),
+  lr: document.createElement("p"),
+
+  gameOver: function () {
+    document.getElementById('reload-btn').disabled = false;
+    //счет на конец игры
+    this.ls.innerHTML = "Ваш счет " + game.score;
+    this.scoreDiv.appendChild(this.ls);
+    //рукорд пользователя
+    this.lr.innerHTML = "Ваш рекорд " + localStorage[game.localRecord];
+    this.userRecord.appendChild(this.lr);
+    recordContainer.style.top = "15%";
+  },
+
+  menu: function () {
+    document.location.reload(false);
+  },
+  reload: function () {
+    document.getElementById('reload-btn').disabled = true;
+    recordContainer.style.top = "-100%"
+    game.platform.w = game.pixel * 8;
+    game.bricks = []; 
+    game.score = 0;
+    game.running = true;
+    game.hearts = 3;
+    game.ball.startBall();
+    game.start();
   },
 };

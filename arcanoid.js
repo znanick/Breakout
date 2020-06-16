@@ -7,7 +7,8 @@ var game = {
   pixel: document.getElementById("gameArea").offsetWidth / 50,
   ball: {},
   platform: {},
-  running: true, //остановка таймера если false
+  running: true,
+  timer: null,
 
   bricks: [],
   brickCountX: 0, //12 - max
@@ -58,6 +59,9 @@ var game = {
     });
 
     document.addEventListener("mousemove", game.platform.mouseMove);
+
+    //touch
+    document.addEventListener("touchmove", game.platform.touchMove);
 
     //получаем из локального хранилища макс счет
     if (!localStorage[game.localRecord]) {
@@ -209,7 +213,7 @@ var game = {
     this.render();
 
     if (this.running) {
-      window.requestAnimationFrame(function () {
+      this.timer = window.requestAnimationFrame(function () {
         game.run();
       });
     }
@@ -224,7 +228,9 @@ var game = {
 
   gameOverScore: function (key) {
     //конец игры
+    this.gameStatus = 0;
     this.running = false;
+    clearTimeout(this.timer);
     audio.gameOver.sound();
     console.log("game over");
     if (navigator.vibrate) {
@@ -240,18 +246,7 @@ var game = {
     }
     console.log(localStorage[key]);
 
-    //счет на конец игры
-    var scoreDiv = document.getElementById("score");
-    var ls = document.createElement("p");
-    ls.innerHTML = "Ваш счет " + this.score;
-    scoreDiv.appendChild(ls);
-
-    //рукорд пользователя
-    var userRecord = document.getElementById("userRecord");
-    var lr = document.createElement("p");
-    lr.innerHTML = "Ваш рекорд " + localStorage[key];
-    userRecord.appendChild(lr);
-    recordContainer.style.top = "15%";
+    gameOverPage.gameOver();
   },
 };
 
@@ -267,6 +262,13 @@ game.platform = {
     var relativeX = e.clientX - 25 * game.pixel;
     if (relativeX > 0 && relativeX < game.w) {
       game.platform.x = relativeX - game.platform.w / 2;
+    }
+  },
+
+  touchMove: function (e) {
+    var touchPos = e.changedTouches[0].pageX;
+    if (touchPos > 0 && touchPos < game.w) {
+      game.platform.x = touchPos - game.platform.w / 2;
     }
   },
   move: function () {
@@ -368,6 +370,8 @@ game.ball = {
     }
   },
   startBall: function () {
+    this.dx = 0;
+    this.dy = 0;
     this.y = game.platform.y - game.pixel / 3;
     this.x = 0;
 

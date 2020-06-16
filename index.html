@@ -57,12 +57,16 @@
         <div id="userRecord"></div>
         <div id="ajaxRecord"></div>
         <div class="btn-cont">
-          <button class="btn-green" id="reload-btn">
+          <button
+            class="btn-green"
+            id="reload-btn"
+            onclick="gameOverPage.reload()"
+          >
             <img class="icon" src="img/reload-btn.png" />
             Заново
           </button>
-          <button class="btn-green" id="menu-btn">
-            <img class="icon" src="img/reload-btn.png" />
+          <button class="btn-green" id="menu-btn" onclick="gameOverPage.menu()">
+            <img class="icon" src="img/exit.png" />
             Меню
           </button>
         </div>
