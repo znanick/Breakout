@@ -36,10 +36,12 @@
 #recordContainer {
   position: absolute;
   width: 50%;
-  height: 70%;
+  height: 50%;
   background-color: #f5f5dc;
   top: -100%;
   left: 25%;
+  color: #a52a2a;
+
   transition: top 1.2s cubic-bezier(0, 0, 1, 1) 300ms;
   text-align: center;
 }
@@ -154,5 +156,17 @@ h2 {
 }
 
 .btn-cont {
-  margin: 3% 5px;
+  margin: 50% 5px 3% 5px;
+}
+@media (max-width: 767) {
+  .btn-cont {
+    font-size: 1vh;
+  }
+}
+
+#score {
+  margin: 7% 5px;
+}
+#userRecord {
+  margin: 7% 5px;
 }

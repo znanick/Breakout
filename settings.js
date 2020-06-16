@@ -16,7 +16,7 @@ var settings = {
     if (!inp.value) {
       inp.focus();
     } else {
-      document.getElementById('start-but').disabled= true;
+      document.getElementById("start-but").disabled = true;
       document.getElementById("settings").style.top = "-120%";
       settings.userName = inp.value;
       game.brickCountX = rx.value;
@@ -123,17 +123,19 @@ var gameOverPage = {
   scoreDiv: document.getElementById("score"),
   ls: document.createElement("p"),
 
-  userRecord: document.getElementById("score"),
+  userRecord: document.getElementById("userRecord"),
   lr: document.createElement("p"),
 
   gameOver: function () {
-    document.getElementById('reload-btn').disabled = false;
+    document.getElementById("reload-btn").disabled = false;
     //счет на конец игры
-    this.ls.innerHTML = "Ваш счет " + game.score;
+    this.ls.innerHTML = "Ваш счет: " + game.score;
     this.scoreDiv.appendChild(this.ls);
+    this.ls.style.fontSize = "3vh";
     //рукорд пользователя
-    this.lr.innerHTML = "Ваш рекорд " + localStorage[game.localRecord];
+    this.lr.innerHTML = "Ваш рекорд: " + localStorage[game.localRecord];
     this.userRecord.appendChild(this.lr);
+    this.lr.style.fontSize = "3vh";
     recordContainer.style.top = "15%";
   },
 
@@ -141,10 +143,10 @@ var gameOverPage = {
     document.location.reload(false);
   },
   reload: function () {
-    document.getElementById('reload-btn').disabled = true;
-    recordContainer.style.top = "-100%"
+    document.getElementById("reload-btn").disabled = true;
+    recordContainer.style.top = "-100%";
     game.platform.w = game.pixel * 8;
-    game.bricks = []; 
+    game.bricks = [];
     game.score = 0;
     game.running = true;
     game.hearts = 3;
