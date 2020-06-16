@@ -105,10 +105,12 @@ var recordsAjax = {
 
   comparison: function (top) {
     console.log(top);
+    console.log("this" + this.topGamer);
+    console.log("class" + recordsAjax.topGamer);
     if (game.score > top.score) {
       top.name = settings.userName;
       top.score = game.score;
-      console.log(top.score);
+      console.log("top" + top);
       this.storeInfo();
     }
   },

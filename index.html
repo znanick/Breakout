@@ -45,17 +45,27 @@
           </div>
           <p id="rxTxt">9</p>
         </div>
-
         <button id="start-but" onclick="settings.start()">Старт</button>
       </div>
+
       <div class="canvas-container" id="gameArea">
         <canvas id="myCanvas"></canvas>
       </div>
+
       <div class="record-container" id="recordContainer">
-        <button class="btn-green">
-          <img class="icon" src="img/reload-btn.png" />
-          Заново
-        </button>
+        <div id="score"></div>
+        <div id="userRecord"></div>
+        <div id="ajaxRecord"></div>
+        <div class="btn-cont">
+          <button class="btn-green" id="reload-btn">
+            <img class="icon" src="img/reload-btn.png" />
+            Заново
+          </button>
+          <button class="btn-green" id="menu-btn">
+            <img class="icon" src="img/reload-btn.png" />
+            Меню
+          </button>
+        </div>
       </div>
     </div>
     <script src="http://fe.it-academy.by/JQ/jquery.js"></script>

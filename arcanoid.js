@@ -3,10 +3,12 @@ var pixel = document.getElementById("gameArea").offsetWidth / 50;
 var game = {
   w: document.getElementById("gameArea").offsetWidth,
   h: document.getElementById("gameArea").offsetHeight,
+  //для адаптива мы будем делать все построения относительно этого значения
   pixel: document.getElementById("gameArea").offsetWidth / 50,
   ball: {},
   platform: {},
-  running: true,
+  running: true, //остановка таймера если false
+
   bricks: [],
   brickCountX: 0, //12 - max
   brickCountY: 0,
@@ -14,12 +16,13 @@ var game = {
     w: 4 * pixel,
     h: 1.2 * pixel,
   },
+
   score: 0,
   localRecord: "localRecord",
-  hearts: 1,
-  gameStatus: 0,
+  hearts: 1, //жизни игрока
+  gameStatus: 0, //0 - мяч не в игре    1-мяч в игре
   random: function (n, m) {
-    //рандом из интервала чисел a , b
+    //рандом из интервала чисел n , m
     return Math.floor(Math.random() * (m - n + 1)) + n;
   },
 
@@ -29,6 +32,8 @@ var game = {
     document.getElementById("myCanvas").setAttribute("width", this.w);
     document.getElementById("myCanvas").setAttribute("height", this.h);
     this.ctx = document.getElementById("myCanvas").getContext("2d");
+
+    //движение клавиатурой
     document.addEventListener("keydown", function (a) {
       if (a.keyCode == 32 && game.gameStatus == 0) {
         game.gameStatus = 1;
@@ -39,16 +44,19 @@ var game = {
         game.platform.dx = game.platform.velo;
       }
     });
+
     document.addEventListener("keyup", function (a) {
       game.platform.stop();
     });
+
+    //движение мышью
     document.addEventListener("click", function () {
       if (game.gameStatus == 0) {
         game.gameStatus = 1;
         game.ball.jump();
-        console.log("click");
       }
     });
+
     document.addEventListener("mousemove", game.platform.mouseMove);
 
     //получаем из локального хранилища макс счет
@@ -58,8 +66,9 @@ var game = {
   },
 
   createBricks: function () {
+    //создание массива кирпичей
     var marginUp = this.pixel * 4;
-    var margin =
+    var margin = //отступ между кирпичами
       (50 * this.pixel - 4 * this.pixel * this.brickCountX) /
       (this.brickCountX + 1);
     var marginArea =
@@ -81,6 +90,8 @@ var game = {
   },
 
   render: function () {
+    //отрисовка всего на игровом поле
+
     this.ctx.clearRect(0, 0, this.w, this.h);
 
     //поле
@@ -165,6 +176,7 @@ var game = {
   },
 
   update: function () {
+    //все движение
     if (this.platform.dx) {
       this.platform.move();
     }
@@ -204,12 +216,14 @@ var game = {
   },
 
   start: function () {
+    //начало игры
     this.init();
     this.run();
     this.createBricks();
   },
 
   gameOverScore: function (key) {
+    //конец игры
     this.running = false;
     audio.gameOver.sound();
     console.log("game over");
@@ -225,10 +239,18 @@ var game = {
       localStorage[key] = JSON.stringify(this.score);
     }
     console.log(localStorage[key]);
-    var recordContainer = document.getElementById("recordContainer");
+
+    //счет на конец игры
+    var scoreDiv = document.getElementById("score");
+    var ls = document.createElement("p");
+    ls.innerHTML = "Ваш счет " + this.score;
+    scoreDiv.appendChild(ls);
+
+    //рукорд пользователя
+    var userRecord = document.getElementById("userRecord");
     var lr = document.createElement("p");
     lr.innerHTML = "Ваш рекорд " + localStorage[key];
-    recordContainer.appendChild(lr);
+    userRecord.appendChild(lr);
     recordContainer.style.top = "15%";
   },
 };
@@ -278,6 +300,7 @@ game.ball = {
   },
 
   collide: function (element) {
+    //проверка на столкновение шарика
     var x = this.x + this.dx;
     var y = this.y + this.dy;
 
