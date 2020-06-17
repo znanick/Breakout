@@ -19,9 +19,9 @@ var game = {
     h: 1.2 * pixel,
   },
 
-  score: 200,
+  score: 0,
   localRecord: "localRecord",
-  hearts: 1, //жизни игрока
+  hearts: 3, //жизни игрока
   gameStatus: 0, //0 - мяч не в игре    1-мяч в игре
   random: function (n, m) {
     //рандом из интервала чисел n , m
