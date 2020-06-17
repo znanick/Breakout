@@ -64,9 +64,9 @@ var recordsAjax = {
         dataType: "json",
         data: {
           f: "UPDATE",
-          n: this.stringName,
+          n: recordsAjax.stringName,
           v: res,
-          p: this.updatePassword,
+          p: recordsAjax.updatePassword,
         },
         success: this.updateReady,
         error: this.errorHandler,
@@ -91,30 +91,31 @@ var recordsAjax = {
   },
 
   readReady: function (callresult) {
+    var record;
     if (callresult.error != undefined) alert(callresult.error);
     else if (callresult.result != "") {
-      this.topGamer = JSON.parse(callresult.result);
-      console.log(this.topGamer);
-      recordsAjax.comparison(this.topGamer);
-      return this.topGamer;
+      record = JSON.parse(callresult.result);
+      recordsAjax.topGamer = record;
+      console.log(record);
+      recordsAjax.comparison(record);
     }
+    gameOverPage.topGamer = recordsAjax.topGamer;
   },
 
   errorHandler: function (jqXHR, statusStr, errorStr) {
     alert(statusStr + " " + errorStr);
   },
 
-  comparison: function (top) {
-    var self = this;
-    console.log(self.topGamer);
-    console.log(top);
+  comparison: function (record) {
+    console.log(this.topGamer);
+    console.log(record);
 
-    if (game.score > top.score) {
-      top.name = settings.userName;
-      top.score = game.score;
-      console.log(self.topGamer);
-      self.storeInfo();
-      return self.topGamer;
+    if (game.score > record.score) {
+      record.name = settings.userName;
+      record.score = game.score;
+      this.topGamer = record;
+      console.log(this.topGamer);
+      this.storeInfo();
     }
   },
 };
@@ -126,12 +127,28 @@ var gameOverPage = {
   userRecord: document.getElementById("userRecord"),
   lr: document.createElement("p"),
 
+  ajaxRecord: document.getElementById("ajaxRecord"),
+  ar: document.createElement("p"),
+
+  topGamer: null,
+
   gameOver: function () {
     document.getElementById("reload-btn").disabled = false;
     //счет на конец игры
     this.ls.innerHTML = "Ваш счет: " + game.score;
     this.scoreDiv.appendChild(this.ls);
     this.ls.style.fontSize = "3vh";
+    //AJAX
+
+    this.ar.innerHTML =
+      "Рекорд: " +
+      gameOverPage.topGamer.name +
+      " " +
+      gameOverPage.topGamer.score +
+      " очков";
+    this.ajaxRecord.appendChild(this.ar);
+    this.ar.style.fontSize = "3vh";
+
     //рукорд пользователя
     this.lr.innerHTML = "Ваш рекорд: " + localStorage[game.localRecord];
     this.userRecord.appendChild(this.lr);

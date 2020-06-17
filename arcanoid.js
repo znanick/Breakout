@@ -1,4 +1,5 @@
 "use strict";
+
 var pixel = document.getElementById("gameArea").offsetWidth / 50;
 var game = {
   w: document.getElementById("gameArea").offsetWidth,
@@ -18,7 +19,7 @@ var game = {
     h: 1.2 * pixel,
   },
 
-  score: 0,
+  score: 200,
   localRecord: "localRecord",
   hearts: 1, //жизни игрока
   gameStatus: 0, //0 - мяч не в игре    1-мяч в игре
@@ -50,6 +51,37 @@ var game = {
       game.platform.stop();
     });
 
+    //сочетание клавиш
+    var pq = false;
+    var pw = false;
+
+    document.addEventListener("keydown", function (a) {
+      if (a.keyCode == 81) {
+        pq = true;
+        if (pq && pw) {
+          game.ball.y = game.h + game.pixel;
+        }
+      }
+    });
+    document.addEventListener("keyup", function (a) {
+      if (a.keyCode == 81) {
+        pq = false;
+      }
+    });
+    document.addEventListener("keydown", function (a) {
+      if (a.keyCode == 87) {
+        pw = true;
+        if (pq && pw) {
+          game.ball.y = game.h + game.pixel;
+        }
+      }
+    });
+    document.addEventListener("keyup", function (a) {
+      if (a.keyCode == 87) {
+        pw = false;
+      }
+    });
+
     //движение мышью
     document.addEventListener("click", function () {
       if (game.gameStatus == 0) {
@@ -67,6 +99,7 @@ var game = {
     if (!localStorage[game.localRecord]) {
       localStorage.setItem(game.localRecord, JSON.stringify(this.score));
     }
+    recordsAjax.afterGame();
   },
 
   createBricks: function () {
