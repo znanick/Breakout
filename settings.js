@@ -96,7 +96,7 @@ var recordsAjax = {
     else if (callresult.result != "") {
       record = JSON.parse(callresult.result);
       recordsAjax.topGamer = record;
-      console.log(record);
+      
       recordsAjax.comparison(record);
     }
     gameOverPage.topGamer = recordsAjax.topGamer;
@@ -107,14 +107,13 @@ var recordsAjax = {
   },
 
   comparison: function (record) {
-    console.log(this.topGamer);
-    console.log(record);
+
 
     if (game.score > record.score) {
       record.name = settings.userName;
       record.score = game.score;
       this.topGamer = record;
-      console.log(this.topGamer);
+     
       this.storeInfo();
     }
   },

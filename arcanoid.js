@@ -292,7 +292,7 @@ game.platform = {
   dx: 0,
   ball: game.ball,
   mouseMove: function (e) {
-    var relativeX = e.clientX - 25 * game.pixel;
+    var relativeX = e.clientX - document.getElementById("myCanvas").offsetLeft;
     if (relativeX > 0 && relativeX < game.w) {
       game.platform.x = relativeX - game.platform.w / 2;
     }
